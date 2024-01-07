@@ -1,5 +1,5 @@
 from utils import *
-import random
+import pygame
 
 
 class Sudoku:
@@ -140,17 +140,89 @@ class Sudoku:
             s = ""
             for i in range(9):
                 if i > 0 and i % 3 == 0:
-                    s += "------+-------+------\n"
+                    s += "―――――――――――――――――――――――――――――\n"
+
                 for j in range(9):
                     if j > 0 and j % 3 == 0:
-                        s += "| "
+                        s += "|"
                     if self.table[i][j] is None:
-                        s += "  "
+                        s += "   "
                     else:
-                        s += str(self.table[i][j]) + " "
+                        s += " " + str(self.table[i][j]) + " "
                     if j == 8:
                         s += "\n"
             return s
+
+    def visualize(self) -> None:
+        # Define the dimensions of the window
+        WINDOW_DIMENSIONS = (453, 453)
+
+        # Define the dimensions of the Sudoku board
+        BOARD_DIMENSIONS = (450, 450)
+
+        # Define the dimensions of each cell in the board
+        CELL_DIMENSIONS = BOARD_DIMENSIONS[0] // 9
+
+        # Define the colors
+        WHITE = (255, 255, 255)
+        BLACK = (0, 0, 0)
+        GRAY = (128, 128, 128)
+
+        # Initialize Pygame
+        pygame.init()
+
+        # Define the font
+        FONT = pygame.font.SysFont("calibri", 40)
+
+        # Create the window
+        window = pygame.display.set_mode(WINDOW_DIMENSIONS)
+
+        # Set the window title
+        pygame.display.set_caption("Sudoku")
+
+
+        # Draw the Sudoku board
+        def draw_board():
+            for i in range(10):
+                if i % 3 == 0:
+                    thickness = 4
+                else:
+                    thickness = 1
+                pygame.draw.line(window, BLACK, (0, i * CELL_DIMENSIONS), (BOARD_DIMENSIONS[0], i * CELL_DIMENSIONS),
+                                 thickness)
+                pygame.draw.line(window, BLACK, (i * CELL_DIMENSIONS, 0), (i * CELL_DIMENSIONS, BOARD_DIMENSIONS[1]),
+                                 thickness)
+
+        # Draw the numbers on the board
+        def draw_numbers():
+            for i in range(9):
+                for j in range(9):
+                    if self.get_val(i + 1, j + 1) is not None:
+                        number = FONT.render(str(self.get_val(i + 1, j + 1)), True, BLACK)
+                        window.blit(number, (j * CELL_DIMENSIONS + 13, i * CELL_DIMENSIONS + 3))
+
+        # Main loop
+        running = True
+        while running:
+            # Handle events
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+
+            # Fill the window with white
+            window.fill(WHITE)
+
+            # Draw the board
+            draw_board()
+
+            # Draw the numbers
+            draw_numbers()
+
+            # Update the display
+            pygame.display.update()
+
+        # Quit Pygame
+        pygame.quit()
 
 
         # # Create a string representation of the list

@@ -4,9 +4,11 @@ def main():
     sudoku, solution = generate_sudoku(3)
     print(sudoku)
 
-    input("Please press any key to show the solution")
+    sudoku.visualize()
 
     print(solution)
+
+    solution.visualize()
 
 if __name__ == "__main__":
     main()
